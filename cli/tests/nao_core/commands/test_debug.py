@@ -3,7 +3,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 from nao_core.commands.debug import check_llm_connection, debug
-from nao_core.config.databases import BigQueryConfig, DuckDBConfig, PostgresConfig
+from nao_core.config.databases import BigQueryConfig, DuckDBConfig, PostgresConfig, TrinoConfig
 from nao_core.config.llm import LLMConfig, LLMProvider
 
 
@@ -180,6 +180,47 @@ class TestDatabaseConnection:
 
         assert success is True
         assert "Connected successfully" in message
+
+    def test_trino_connection_with_default_schema(self):
+        config = TrinoConfig(
+            name="test",
+            host="localhost",
+            port=8080,
+            catalog="hive",
+            user="nao",
+            schema_name="analytics",
+        )
+        mock_conn = MagicMock()
+        mock_conn.list_tables.return_value = ["table1", "table2"]
+
+        with patch.object(TrinoConfig, "connect", return_value=mock_conn):
+            success, message = config.check_connection()
+
+        assert success is True
+        assert "2 tables found" in message
+
+    def test_trino_get_schemas_filters_builtins_and_nullish_values(self):
+        config = TrinoConfig(name="test", host="localhost", port=8080, catalog="hive", user="nao")
+        mock_conn = MagicMock()
+        mock_result = MagicMock()
+        mock_result.fetchall.return_value = [
+            ("information_schema",),
+            ("default",),
+            ("sys",),
+            ("pg_catalog",),
+            (" pg_internal ",),
+            (" public ",),
+            ('"analytics"',),
+            ("'sales'",),
+            ("analytics",),
+            ("",),
+            (None,),
+        ]
+        mock_conn.raw_sql.return_value = mock_result
+
+        schemas = config.get_schemas(mock_conn)
+
+        assert schemas == ["analytics", "public", "sales"]
 
     def test_connection_failure(self):
         config = DuckDBConfig(name="test", path=":memory:")
