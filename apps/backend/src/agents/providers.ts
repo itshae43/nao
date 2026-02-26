@@ -39,6 +39,7 @@ export const LLM_PROVIDERS: LlmProvidersType = {
 							'list',
 							'read',
 							'search',
+							'story',
 						],
 					},
 				],
