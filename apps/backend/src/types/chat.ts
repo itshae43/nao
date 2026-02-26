@@ -82,6 +82,11 @@ export type TokenCost = {
 	totalCost?: number;
 };
 
+export type ContextUsage = {
+	tokensUsed: number;
+	contextWindow: number | null;
+};
+
 /**
  * Agent Request Types
  */

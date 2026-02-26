@@ -39,6 +39,7 @@ type ProviderModel<P extends LlmProvider> = {
 	id: string;
 	name: string;
 	default?: boolean;
+	contextWindow?: number;
 	config?: ProviderConfigMap[P];
 	costPerM?: TokenCost;
 };
@@ -47,6 +48,7 @@ type ProviderModel<P extends LlmProvider> = {
 type ProviderConfig<P extends LlmProvider> = {
 	envVar: string;
 	baseUrlEnvVar?: string;
+	defaultOptions?: ProviderConfigMap[P];
 	models: readonly ProviderModel<P>[];
 	/** Preferred cheap model id for memory extraction. */
 	extractorModelId: string;
