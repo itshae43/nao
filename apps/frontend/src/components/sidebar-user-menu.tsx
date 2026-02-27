@@ -8,8 +8,8 @@ import {
 	DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 
-import { cn } from '@/lib/utils';
 import { useSession } from '@/lib/auth-client';
+import { cn, hideIf } from '@/lib/utils';
 
 interface SidebarUserMenuProps {
 	isCollapsed: boolean;
@@ -31,19 +31,19 @@ export function SidebarUserMenu({ isCollapsed }: SidebarUserMenuProps) {
 						'hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
 						'data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground',
 						'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-						'transition-colors duration-200',
-						isCollapsed ? 'p-1.5 justify-center' : 'px-3 py-2',
+						'transition-[background-color,padding] duration-300',
+						isCollapsed ? 'p-1.5' : 'px-3 py-2',
 					)}
 				>
 					{username && <Avatar username={username} className='shrink-0 size-8' />}
 
 					<span
 						className={cn(
-							'grid flex-1 text-left text-sm leading-tight transition-[width,opacity] duration-200 overflow-hidden',
-							isCollapsed ? 'w-0 opacity-0' : 'w-auto opacity-100',
+							'flex flex-col justify-center text-left h-8 transition-[opacity,visibility] duration-300 overflow-hidden',
+							hideIf(isCollapsed),
 						)}
 					>
-						<span className='truncate font-semibold'>{username}</span>
+						<span className='truncate text-sm font-semibold'>{username}</span>
 						<span className='truncate text-xs text-muted-foreground'>{email}</span>
 					</span>
 				</button>

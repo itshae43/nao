@@ -1,6 +1,6 @@
-import { ArrowLeftFromLine, ArrowRightToLine, PlusIcon, ArrowLeft, ChevronRight, SearchIcon } from 'lucide-react';
-import { useEffect, useCallback, useState } from 'react';
-import { Link, useNavigate, useMatchRoute } from '@tanstack/react-router';
+import { ArrowLeft, ArrowLeftFromLine, ArrowRightToLine, ChevronRight, PlusIcon, SearchIcon } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
+import { Link, useMatchRoute, useNavigate } from '@tanstack/react-router';
 import { ChatList } from './sidebar-chat-list';
 import { SidebarUserMenu } from './sidebar-user-menu';
 import { SidebarSettingsNav } from './sidebar-settings-nav';
@@ -123,7 +123,7 @@ export function Sidebar() {
 				<SidebarNav chats={chats.data?.chats || []} isCollapsed={effectiveIsCollapsed} />
 			)}
 
-			<div className='mt-auto p-2'>
+			<div className={cn('mt-auto transition-[padding] duration-300', effectiveIsCollapsed ? 'p-1' : 'p-2')}>
 				<div className='my-2 border-t border-sidebar-border' />
 				<SidebarUserMenu isCollapsed={effectiveIsCollapsed} />
 			</div>
