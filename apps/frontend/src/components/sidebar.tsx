@@ -123,7 +123,8 @@ export function Sidebar() {
 				<SidebarNav chats={chats.data?.chats || []} isCollapsed={effectiveIsCollapsed} />
 			)}
 
-			<div className={cn('mt-auto transition-[padding] duration-300', effectiveIsCollapsed ? 'p-1' : 'p-2')}>
+			<div className='mt-auto p-2'>
+				<div className='my-2 border-t border-sidebar-border' />
 				<SidebarUserMenu isCollapsed={effectiveIsCollapsed} />
 			</div>
 		</div>

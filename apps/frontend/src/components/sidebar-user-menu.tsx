@@ -1,4 +1,3 @@
-import { ChevronDown } from 'lucide-react';
 import { useNavigate } from '@tanstack/react-router';
 import { Avatar } from './ui/avatar';
 import {
@@ -9,7 +8,7 @@ import {
 	DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 
-import { cn, hideIf } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { useSession } from '@/lib/auth-client';
 
 interface SidebarUserMenuProps {
@@ -20,6 +19,7 @@ export function SidebarUserMenu({ isCollapsed }: SidebarUserMenuProps) {
 	const { data: session } = useSession();
 	const navigate = useNavigate();
 	const username = session?.user?.name;
+	const email = session?.user?.email;
 
 	return (
 		<DropdownMenu>
@@ -28,25 +28,24 @@ export function SidebarUserMenu({ isCollapsed }: SidebarUserMenuProps) {
 					type='button'
 					className={cn(
 						'group flex w-full items-center gap-2 rounded-lg',
-						'hover:bg-sidebar-accent transition-[background-color,padding] duration-300',
+						'hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+						'data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground',
 						'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-						isCollapsed ? 'p-1.5' : 'px-3 py-2',
+						'transition-colors duration-200',
+						isCollapsed ? 'p-1.5 justify-center' : 'px-3 py-2',
 					)}
 				>
-					{username && <Avatar username={username} className='shrink-0' />}
+					{username && <Avatar username={username} className='shrink-0 size-8' />}
 
 					<span
 						className={cn(
-							'min-w-0 flex-1 text-left transition-[opacity,visibility] duration-300',
-							hideIf(isCollapsed),
+							'grid flex-1 text-left text-sm leading-tight transition-[width,opacity] duration-200 overflow-hidden',
+							isCollapsed ? 'w-0 opacity-0' : 'w-auto opacity-100',
 						)}
 					>
-						<span className='block truncate text-sm font-medium'>{username}</span>
+						<span className='truncate font-semibold'>{username}</span>
+						<span className='truncate text-xs text-muted-foreground'>{email}</span>
 					</span>
-
-					{!isCollapsed && (
-						<ChevronDown className='h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200 group-data-[state=open]:rotate-180' />
-					)}
 				</button>
 			</DropdownMenuTrigger>
 
